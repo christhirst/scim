@@ -1,0 +1,12 @@
+# Configuration for SCIM 2.0 Rust Server
+
+# HTTP Server configuration
+http_host = "127.0.0.1"
+http_port = 8080
+
+# gRPC Server configuration
+grpc_host = "127.0.0.1"
+grpc_port = 50051
+
+# Bearer Token for SCIM API Authorization
+auth_token = "super-secret-scim-token"

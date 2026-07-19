@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package scim;
+
+service ScimControl {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc GetUser(GetUserRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteResponse);
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+
+  rpc CreateGroup(CreateGroupRequest) returns (GroupResponse);
+  rpc GetGroup(GetGroupRequest) returns (GroupResponse);
+  rpc UpdateGroup(UpdateGroupRequest) returns (GroupResponse);
+  rpc DeleteGroup(DeleteGroupRequest) returns (DeleteResponse);
+  rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse);
+
+  rpc GetStats(StatsRequest) returns (StatsResponse);
+  rpc ClearAll(ClearAllRequest) returns (ClearAllResponse);
+}
+
+message Email {
+  string value = 1;
+  string type = 2;
+  bool primary = 3;
+}
+
+message Name {
+  string formatted = 1;
+  string family_name = 2;
+  string given_name = 3;
+}
+
+message User {
+  string id = 1;
+  string external_id = 2;
+  string user_name = 3;
+  Name name = 4;
+  string display_name = 5;
+  repeated Email emails = 6;
+  bool active = 7;
+}
+
+message GroupMember {
+  string value = 1; // User ID
+  string ref = 2;   // $ref URI
+  string display = 3;
+}
+
+message Group {
+  string id = 1;
+  string display_name = 2;
+  repeated GroupMember members = 3;
+}
+
+message CreateUserRequest {
+  string external_id = 1;
+  string user_name = 2;
+  Name name = 3;
+  string display_name = 4;
+  repeated Email emails = 5;
+  bool active = 6;
+}
+
+message UserResponse {
+  User user = 1;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string external_id = 2;
+  string user_name = 3;
+  Name name = 4;
+  string display_name = 5;
+  repeated Email emails = 6;
+  bool active = 7;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ListUsersRequest {
+  string filter = 1;
+  int32 start_index = 2;
+  int32 count = 3;
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+  int32 total_results = 2;
+  int32 items_per_page = 3;
+  int32 start_index = 4;
+}
+
+message CreateGroupRequest {
+  string display_name = 1;
+  repeated GroupMember members = 2;
+}
+
+message GroupResponse {
+  Group group = 1;
+}
+
+message GetGroupRequest {
+  string id = 1;
+}
+
+message UpdateGroupRequest {
+  string id = 1;
+  string display_name = 2;
+  repeated GroupMember members = 3;
+}
+
+message DeleteGroupRequest {
+  string id = 1;
+}
+
+message ListGroupsRequest {
+  string filter = 1;
+  int32 start_index = 2;
+  int32 count = 3;
+}
+
+message ListGroupsResponse {
+  repeated Group groups = 1;
+  int32 total_results = 2;
+  int32 items_per_page = 3;
+  int32 start_index = 4;
+}
+
+message StatsRequest {}
+
+message StatsResponse {
+  int32 total_users = 1;
+  int32 total_groups = 2;
+}
+
+message ClearAllRequest {}
+
+message ClearAllResponse {
+  bool success = 1;
+}
